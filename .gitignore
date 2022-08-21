@@ -1,0 +1,4 @@
+ckpt/*
+log/*
+*.pth
+__pycache__
