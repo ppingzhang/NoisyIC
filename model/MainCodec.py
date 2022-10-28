@@ -113,7 +113,6 @@ class ResBlock(nn.Module):
         out = x + x1
         return out
 
-# Layer one: enhancement
 class spatial_attn_layer(nn.Module):
     def __init__(self, kernel_size=5):
         super(spatial_attn_layer, self).__init__()
@@ -146,7 +145,7 @@ class atten_ResBlock(nn.Module):
         out = x + x1
         return out
 
-# Layer two: adaptive denoising
+
 class SKFF(nn.Module):
     def __init__(self, in_channels, height=3, reduction=8, bias=False):
         super(SKFF, self).__init__()
@@ -183,27 +182,10 @@ class SKFF(nn.Module):
         return feats_V
 
 
-'''
-1. H-net 中的conv 用WV-trans替代
-'''
-
 
 class MainCodec(CompressionModel):
-    r"""Scale Hyperprior model from J. Balle, D. Minnen, S. Singh, S.J. Hwang,
-    N. Johnston: `"Variational Image Compression with a Scale Hyperprior"
-    <https://arxiv.org/abs/1802.01436>`_ Int. Conf. on Learning Representations
-    (ICLR), 2018.
-
-    Args:
-        N (int): Number of channels
-        M (int): Number of channels in the expansion layers (last layer of the
-            encoder and last layer of the hyperprior decoder)
-    """
-
-    def __init__(self, opt=None, lmbda=1, **kwargs):
+    def __init__(self, opt=None, **kwargs):
         
-
-        ####
         if opt.label_str == '64_96':
             self.N = 128//2 
             self.M = 192//2

@@ -1,4 +1,11 @@
 ckpt/*
 log/*
+dataset/*
+loss/*.pth
+test/train/*
+test/test/*
+result
 *.pth
 __pycache__
+
+dataset

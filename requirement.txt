@@ -1,0 +1,11 @@
+
+tqdm
+pillow
+torch
+tensorboard
+torchvision
+tensorboardX
+scikit-image
+compressai
+opencv-python
+numpy

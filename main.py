@@ -16,7 +16,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 from tensorboardX import SummaryWriter
 from torchvision import transforms
-from pytorch_msssim import ms_ssim
 import torch.nn as nn
 from Common.util import save_checkpoint, psnr, tensor2img, print_loss, show_in_board
 
@@ -27,10 +26,10 @@ from data.dataset_noise_mix import DataLoader_Noise_domain_noise
 
 
 from model import create_model
-from data.test_dataload import data_load
+from data.test_dataload import data_load, data_load_same_name
 
+os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 torch.backends.cudnn.deterministic = True
-# os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 
 logger = logging.getLogger(config.args.model)
 logger.setLevel(level=logging.INFO)
@@ -48,7 +47,6 @@ filehandler = logging.FileHandler(
     f'./ckpt/log/{config.args.model}_{config.args.label_str}_{config.args.lmbda}.log')
 filehandler.setFormatter(formatter)
 logger.addHandler(filehandler)
-
 
 writer = SummaryWriter(f'./log/{config.args.model}/{config.args.label_str}/{str(config.args.lmbda)}')
 
@@ -111,7 +109,8 @@ def train(opt):
         random.seed(opt.seed)
 
     train_dataloader = DataLoader_Noise_domain_noise(
-        opt.train_dataset,
+        opt.train_img_dataset,
+        opt.train_real_dataset,
         opt.image_size,
         opt.batch_size)
 
@@ -133,10 +132,9 @@ def train(opt):
         checkpoint = torch.load(opt.ckpt)
         net.load_state_dict(checkpoint['state_dict'])
         aux_optimizer.load_state_dict(checkpoint['aux_optimizer'])
-        begin_epoch = 1
+        begin_epoch = checkpoint['epoch']
 
     for epoch in range(begin_epoch, opt.epochs):
-
         if opt.save:
             net.update(force=True)
             save_checkpoint(
@@ -210,10 +208,11 @@ def test_img(model, x, p_x, save_name, lmbda, label):
 def test(opt):
     device = "cuda" if opt.cuda and torch.cuda.is_available() else "cpu"
 
-    lmbda_list = [1, 5, 10, 20, 50, 100]
-    result_array = np.zeros([2, 8])
+    lmbda_list = [0, 1, 2, 3, 4]
+    ll = len(lmbda_list)
+    result_array = np.zeros([2, ll])
 
-    for jj in [0, 1, 3, 4]:  # range(0, 7): # range(0, 7):
+    for jj in range(ll):  # range(0, 7): # range(0, 7):
         opt.lmbda = lmbda_list[jj]
         net = create_model(opt)
         net.to(device)
@@ -221,19 +220,19 @@ def test(opt):
         if not len(opt.ckpt) == 0:
             ckpt_path = opt.ckpt
         else:
-            ckpt_path = './ckpt/{model}/{label_str}/{lmbda}/best.pth.tar'.format(
-                model=opt.model, label_str=opt.label_str, lmbda=lmbda_list[jj])
+            ckpt_path = './ckpt/{model}/{idx}-best.pth.tar'.format(
+                model=opt.model, idx = opt.lmbda)
         
         checkpoint = torch.load(ckpt_path)
-        
         net.load_state_dict(checkpoint['state_dict'])
-        for parameter in net.parameters():
-            parameter.requires_grad = False
-
         net.eval()
 
         transform = transforms.Compose([transforms.ToTensor()])
-        gt_img_list, de_img_list = data_load(opt.test_dataset_de, opt.test_dataset_gt)
+        
+        
+        gt_img_list, de_img_list = data_load_same_name(opt.test_dataset_de, opt.test_dataset_gt)
+        if not (len(gt_img_list) > 0 & len(de_img_list)):
+            raise ValueError("Please check the dataset path! Or check the image whether it is loaded or not.")
 
         psnr_all = []
         bpp_all = []
@@ -242,15 +241,12 @@ def test(opt):
 
             img = Image.open(img_path).convert('RGB')
             image_or = Image.open(p_img_path).convert('RGB')
-            save_name = img_path.replace(
-                '/test_dataset/',
-                '/result_new/Ours/{model}/{label_str}/{lmbda}/'.format(
-                    model=opt.model,
-                    label_str=opt.label_str,
-                    lmbda=lmbda_list[jj]))
-            # rint(save_name)
-            if save_name == img_path:
-                raise ValueError(f"save_name:{save_name} == img_path:{img_path}")
+            
+            basename = os.path.basename(img_path)
+            save_name = f'./result/Ours/{opt.model}/{opt.label_str}/{lmbda_list[jj]}/{basename}'
+            if not os.path.exists(os.path.dirname(save_name)):
+                os.makedirs(os.path.dirname(save_name))
+
             result = test_img(
                 net,
                 transform(img),
@@ -261,31 +257,29 @@ def test(opt):
             bpp_all.append(result['bpp'])
 
 
-            result_str1 = '{}-----psnr:{:.2f}, bpp:{:.2f}'.format(
-                opt.model,
-                result['psnr'],
-                result['bpp'])
+            #result_str1 = '{}-----psnr:{:.2f}, bpp:{:.2f}'.format(
+            #    opt.model,
+            #    result['psnr'],
+            #    result['bpp'])
             #print(result_str1)
 
         psnr_all = np.array(psnr_all)
         bpp_all = np.array(bpp_all)
-        # print(bpp_all)
+
         result_array[0, jj] = np.mean(psnr_all)
         result_array[1, jj] = np.mean(bpp_all)
 
-        result_str = '{}-----psnr:{:.2f}, bpp:{:.2f}'.format(
+        result_str = '{} psnr:{:.2f}, bpp:{:.2f}'.format(
             opt.model,
             np.mean(psnr_all),
             np.mean(bpp_all))
         print(result_str)
 
-
         psnr_all = np.array(psnr_all)
         bpp_all = np.array(bpp_all)
 
         result_array[0, jj] = np.mean(psnr_all)
         result_array[1, jj] = np.mean(bpp_all)
-
 
     print('----------result------')
     for ii in range(2):
@@ -295,12 +289,10 @@ def test(opt):
     print('----------result------')
     for ii in range(2):
         result_str = ''
-        for kk in range(8):
+        for kk in range(ll):
             result_str += f'{result_array[ii, kk]}\t'
         print(result_str)
         print("\n")
-
-
 
 
 if __name__ == "__main__":

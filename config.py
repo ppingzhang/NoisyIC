@@ -7,18 +7,17 @@ parser.add_argument('--seed', type=float, default=1, help='Set random seed for r
 parser.add_argument('--image_size', type=int, nargs=2, default=(256, 256), help='Size of the patches to be cropped (default: %(default)s)')
 parser.add_argument('--batch_size', type=int, default=8, help='Batch size (default: %(default)s)')
 
-parser.add_argument('--train_dataset', default="flicker", type=str, help='Training dataset') 
-
+parser.add_argument('--train_img_dataset', default="/data/zpp/NIC/dataset/flicker", type=str, help='Training dataset') 
+parser.add_argument('--train_real_dataset', default="/data/zpp/NIC/dataset/SSID_path", type=str, help='Training dataset') 
 
 parser.add_argument('--test_dataset_de', default="./", type=str, help='Testing dataset:noisy image')
 parser.add_argument('--test_dataset_gt', default="./", type=str, help='Testing dataset:clean image')
 
-parser.add_argument('--test_name', default="basic", type=str, help='basic, Kodak, test dataset')
 parser.add_argument('--model', default="MainCodec", type=str, help='')
 parser.add_argument('--label_str', default="basic", type=str, help='')
 parser.add_argument('--mode', default="train", type=str, help='mode of model')
 parser.add_argument('--ckpt', default="", type=str, help='checkpoint')
-
+parser.add_argument('--restore', action='store_true', default=False, help='Restore model')
 
 parser.add_argument('-e', '--epochs', default=100, type=int, help='Number of epochs (default: %(default)s)')
 parser.add_argument('-lr', '--learning-rate', default=1e-4, type=float, help='Learning rate (default: %(default)s)')
@@ -31,7 +30,6 @@ parser.add_argument('--save', action='store_false', default=True, help='Save mod
 parser.add_argument('--fix_d', action='store_true', default=False)
 
 parser.add_argument('--print_num', type=int, default=100, help='print interval')
-parser.add_argument('--restore', action='store_true', default=False, help='Restore model')
 parser.add_argument('--clip_max_norm', default=1.0, type=float, help='=0.1, gradient clipping max norm') 
 
 args = parser.parse_args()
