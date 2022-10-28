@@ -1,6 +1,6 @@
-NoisyIC
+# NoisyIC
 
-Official Pytorch Implementation for "Learning-based Compression for Noisy Images in the Wild", TCSVT 2022
+# Official Pytorch Implementation for "Learning-based Compression for Noisy Images in the Wild", TCSVT 2022
 
 ## Installation
 git clone https://github.com/ppingzhang/NoisyIC.git
@@ -12,7 +12,7 @@ pip install -r requirement.txt
 Note: torch, GPU and CUDA version need match!
 
 ## Dataset
-###How to get the dataset:
+### How to obtain the dataset:
 
 Flickr3k: [download1](https://www.kaggle.com/datasets/hsankesara/flickr-image-dataset) or [download2](https://www.kaggle.com/datasets/hsankesara/flickr-image-dataset)
 
