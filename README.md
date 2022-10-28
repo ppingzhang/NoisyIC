@@ -15,9 +15,10 @@ Note: torch, GPU and CUDA version need match!
 ###How to get the dataset:
 
 Flickr3k: [download1](https://www.kaggle.com/datasets/hsankesara/flickr-image-dataset) or [download2](https://www.kaggle.com/datasets/hsankesara/flickr-image-dataset)
+
 SSID: [download](https://www.eecs.yorku.ca/~kamel/sidd/dataset.php)
 
-
+```
 the structure of image path
 ├── flickr3k
 │   ├── 9964318083_6199f7ee20_b.jpg
@@ -29,22 +30,21 @@ the structure of image path
 │   ├── img0001.png
 │   ├── img0001_gt.png
 ├── ...
+```
 
 > Note: Your can originze your own dataset following above data structure. 
 > Or you can create your own rule to find the imags in the "data/dataset_load.py"
 
 
 ## Run the training code
-
-python main.py --mode=train --train_img_dataset='./dataset/flickr3k' --train_real_dataset='./dataset/SSID' --model=MainCodec --lmbda=1 #[1, 5, 20, 50]
+Pretrained model can be download through this [link]()
+`python main.py --mode=train --train_img_dataset='./dataset/flickr3k' --train_real_dataset='./dataset/SSID' --model=MainCodec --lmbda=1`` #[1, 5, 20, 50]
 
 ## run the testing code
-
-python3 main.py --mode=test --model=MainCodec --test_dataset_de=/data/zpp/NIC/data/test_dataset/Gaussian_Noise/Kodak/15/    --test_dataset_gt=/data/zpp/NIC/data/KODAK_PNG/ --ckpt=''
+python3 main.py --mode=test --model=MainCodec --test_dataset_de=/data/zpp/NIC/data/test_dataset/Gaussian_Noise/Kodak/15/    --test_dataset_gt=/data/zpp/NIC/data/KODAK_PNG/ --ckpt=''`
 
 ## test a single image
-
-python3 demo.py --ckpt=test --img_path="./ckpt.pth.tar" --img_save_path="./xx_decode.jpg" --bin_save_path="./xx_bitstream.bin" 
+`python3 demo.py --ckpt=test --img_path="./ckpt.pth.tar" --img_save_path="./xx_decode.jpg" --bin_save_path="./xx_bitstream.bin" `
 
 
 ## BibTeX
@@ -56,6 +56,5 @@ python3 demo.py --ckpt=test --img_path="./ckpt.pth.tar" --img_save_path="./xx_de
   year={2022},
   volume={},
   number={},
-  pages={1-1},
-  doi={10.1109/TCSVT.2022.3200763}}
+  pages={1-1}}
 ```
