@@ -39,9 +39,9 @@ the structure of image path
 
 
 ## Run the training code
-**VGG19 pretrain model need to be downloaded [link](https://www.kaggle.com/datasets/phuhung273/vgg19dcbb9e9dpth) and please set it in the ./loss file**
+- **VGG19 pretrain model need to be downloaded [link](https://www.kaggle.com/datasets/phuhung273/vgg19dcbb9e9dpth) and please set it in the ./loss file**
 
-**Pretrained model can be download through this [link](https://drive.google.com/drive/folders/1Y4dViyFL6WmNiy1MtmNjABBDqeCPdsSq?usp=sharing)**
+- **Pretrained model can be download through this [link](https://drive.google.com/drive/folders/1Y4dViyFL6WmNiy1MtmNjABBDqeCPdsSq?usp=sharing)**
 
 > python main.py --mode=train --train_img_dataset='./dataset/flickr3k' --train_real_dataset='./dataset/SSID' --model=MainCodec --lmbda=1 #[1, 5, 20, 50]
 
