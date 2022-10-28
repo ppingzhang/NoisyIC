@@ -34,7 +34,7 @@ the structure of image path
 ├── ...
 ```
 
-> Note: Your can originze your own dataset following above data structure. 
+> **Note: Your can originze your own dataset following above data structure. **
 > Or you can create your own rule to find the imags in the "data/dataset_load.py"
 
 
@@ -45,10 +45,10 @@ the structure of image path
 
 > python main.py --mode=train --train_img_dataset='./dataset/flickr3k' --train_real_dataset='./dataset/SSID' --model=MainCodec --lmbda=1 #[1, 5, 20, 50]
 
-## run the testing code
+## Run the testing code
 > python main.py --mode=test --model=MainCodec --test_dataset_de=./noisy_images_path/    --test_dataset_gt=./clean_images_path/ --ckpt='' 
 
-## test a single image
+## Test a single image
 > python demo.py --ckpt=test --img_path="./ckpt.pth.tar" --img_save_path="./xx_decode.jpg" --bin_save_path="./xx_bitstream.bin" 
 
 
