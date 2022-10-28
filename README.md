@@ -1,13 +1,13 @@
 # NoisyIC
 
-# Official Pytorch Implementation for "Learning-based Compression for Noisy Images in the Wild", TCSVT 2022
+### Official Pytorch Implementation for "Learning-based Compression for Noisy Images in the Wild", TCSVT 2022
 
 ## Installation
-git clone https://github.com/ppingzhang/NoisyIC.git
+> git clone https://github.com/ppingzhang/NoisyIC.git
 
-conda create -n NoisyIC python=3.8 
-conda activate NoisyIC
-pip install -r requirement.txt
+> conda create -n NoisyIC python=3.8 
+> conda activate NoisyIC
+> pip install -r requirement.txt
 
 Note: torch, GPU and CUDA version need match!
 
