@@ -46,10 +46,10 @@ the structure of image path
 > python main.py --mode=train --train_img_dataset='./dataset/flickr3k' --train_real_dataset='./dataset/SSID' --model=MainCodec --lmbda=1 #[1, 5, 20, 50]
 
 ## run the testing code
-> python3 main.py --mode=test --model=MainCodec --test_dataset_de=./noisy_images_path/    --test_dataset_gt=./clean_images_path/ --ckpt='' 
+> python main.py --mode=test --model=MainCodec --test_dataset_de=./noisy_images_path/    --test_dataset_gt=./clean_images_path/ --ckpt='' 
 
 ## test a single image
-> python3 demo.py --ckpt=test --img_path="./ckpt.pth.tar" --img_save_path="./xx_decode.jpg" --bin_save_path="./xx_bitstream.bin" 
+> python demo.py --ckpt=test --img_path="./ckpt.pth.tar" --img_save_path="./xx_decode.jpg" --bin_save_path="./xx_bitstream.bin" 
 
 
 ## BibTeX
